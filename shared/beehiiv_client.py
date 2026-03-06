@@ -77,12 +77,17 @@ class BeehiivClient:
             send_ts = scheduled_at.astimezone(pytz.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
         payload: dict = {
-            "publication_id": self.publication_id,
-            "title": subject,          # Required internal post title (Beehiiv API)
-            "subject_line": subject,
-            "preview_text": preview_text,
-            "content_html": content_html,
+            "title": subject,           # Required internal post title
+            "subtitle": preview_text,   # Shown on web/post page
             "status": status,
+            "body_content": content_html,
+            "email_settings": {
+                "email_subject_line": subject,
+                "email_preview_text": preview_text,
+                "display_title_in_email": False,
+                "display_byline_in_email": False,
+                "display_subtitle_in_email": False,
+            },
         }
         if send_ts:
             payload["scheduled_at"] = send_ts
