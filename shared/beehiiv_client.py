@@ -78,6 +78,7 @@ class BeehiivClient:
 
         payload: dict = {
             "publication_id": self.publication_id,
+            "title": subject,          # Required internal post title (Beehiiv API)
             "subject_line": subject,
             "preview_text": preview_text,
             "content_html": content_html,
