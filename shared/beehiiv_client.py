@@ -68,12 +68,13 @@ class BeehiivClient:
         """
         # Resolve send time
         status = "draft" if draft else "confirmed"
-        send_ts: Optional[int] = None
+        send_ts: Optional[str] = None
 
         if not draft:
             if scheduled_at is None:
                 scheduled_at = self._next_send_time(send_hour_et, send_minute_et)
-            send_ts = int(scheduled_at.timestamp())
+            # Beehiiv expects ISO 8601 string, not a Unix timestamp
+            send_ts = scheduled_at.astimezone(pytz.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
         payload: dict = {
             "publication_id": self.publication_id,
