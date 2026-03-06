@@ -48,18 +48,20 @@ class BeehiivClient:
         draft: bool = False,
         tags: Optional[list[str]] = None,
         send_hour_et: int = 7,
+        send_minute_et: int = 0,
     ) -> dict:
         """
         Creates (and optionally schedules) a newsletter post.
 
         Args:
-            subject:        Email subject line.
-            content_html:   Full HTML body of the email.
-            preview_text:   Preheader text shown in inbox previews.
-            scheduled_at:   datetime to send. If None, calculated from send_hour_et.
-            draft:          If True, post is saved as draft (not confirmed for send).
-            tags:           Optional list of content tags for categorization.
-            send_hour_et:   Hour (24h, Eastern Time) to send if scheduled_at not given.
+            subject:          Email subject line.
+            content_html:     Full HTML body of the email.
+            preview_text:     Preheader text shown in inbox previews.
+            scheduled_at:     datetime to send. If None, calculated from send_hour_et/send_minute_et.
+            draft:            If True, post is saved as draft (not confirmed for send).
+            tags:             Optional list of content tags for categorization.
+            send_hour_et:     Hour (24h, Eastern Time) to send if scheduled_at not given.
+            send_minute_et:   Minute (0-59) to send — allows staggering newsletters.
 
         Returns:
             Full Beehiiv API response dict with post id, web_url, status, etc.
@@ -70,7 +72,7 @@ class BeehiivClient:
 
         if not draft:
             if scheduled_at is None:
-                scheduled_at = self._next_send_time(send_hour_et)
+                scheduled_at = self._next_send_time(send_hour_et, send_minute_et)
             send_ts = int(scheduled_at.timestamp())
 
         payload: dict = {
@@ -160,16 +162,16 @@ class BeehiivClient:
     # -----------------------------------------------------------------------
 
     @staticmethod
-    def _next_send_time(send_hour_et: int) -> datetime:
+    def _next_send_time(send_hour_et: int, send_minute_et: int = 0) -> datetime:
         """
-        Returns the next occurrence of send_hour_et in Eastern Time.
-        If that hour has already passed today, returns tomorrow's occurrence.
+        Returns the next occurrence of send_hour_et:send_minute_et in Eastern Time.
+        If that time has already passed today, returns tomorrow's occurrence.
         """
+        from datetime import timedelta
         et = pytz.timezone("America/New_York")
         now_et = datetime.now(et)
-        target = now_et.replace(hour=send_hour_et, minute=0, second=0, microsecond=0)
+        target = now_et.replace(hour=send_hour_et, minute=send_minute_et, second=0, microsecond=0)
         if now_et >= target:
-            from datetime import timedelta
             target += timedelta(days=1)
         return target
 

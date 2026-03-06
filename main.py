@@ -46,7 +46,7 @@ def main():
 
     client = BeehiivClient(api_key=config.BEEHIIV_API_KEY, publication_id=config.BEEHIIV_PUBLICATION_ID)
     post = client.create_post(subject=subject, content_html=html, preview_text=preview_text,
-                               draft=args.draft, tags=["playtime"], send_hour_et=config.SEND_HOUR)
+                               draft=args.draft, tags=["playtime"], send_hour_et=config.SEND_HOUR, send_minute_et=config.SEND_MINUTE)
     print(f"✅ {'DRAFT' if args.draft else 'SCHEDULED'}: {post.get('id')}")
 
 if __name__ == "__main__":

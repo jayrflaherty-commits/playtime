@@ -8,6 +8,7 @@ NEWSLETTER_NAME        = "Playtime"
 NEWSLETTER_DIR         = "playtime"
 TAGLINE                = "Games, fun, and entertainment — every single day"
 SEND_HOUR              = 7
+SEND_MINUTE            = 30
 TIMEZONE               = "America/New_York"
 
 ANTHROPIC_API_KEY      = os.getenv("ANTHROPIC_API_KEY", "")

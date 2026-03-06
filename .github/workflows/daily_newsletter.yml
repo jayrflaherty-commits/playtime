@@ -2,7 +2,7 @@ name: Playtime — Daily Send
 
 on:
   schedule:
-    - cron: '30 11 * * *'   # 7:30 AM ET (11:30 UTC)
+    - cron: '10 4 * * *'   # 11 PM ET (generate night before, schedules for next morning)   # 7:30 AM ET (11:30 UTC)
   workflow_dispatch:
     inputs:
       date:
