@@ -2,7 +2,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 NEWSLETTER_NAME        = "Playtime"
 NEWSLETTER_DIR         = "playtime"
